@@ -48,47 +48,47 @@ Algorithm followed:
 #include<string.h>
 
 char stack[MAX_SIZE*2];						//Stack
-int sp=-1;									//Stack pointer
+int sp=-1;							//Stack pointer
 char input[MAX_SIZE];						//Input tape
-char *ip = input;							//Input pointer
+char *ip = input;						//Input pointer
 void push(char ip); 						//Push function stack
-void pop();									//Pop function stack
-char top();									//Top function stack
-int getParsingTableColumnIndex(char ip); 	//Parsing table column index
-void parse();								//Parse function stack
-void shift(char *);							//Shift function
+void pop();							//Pop function stack
+char top();							//Top function stack
+int getParsingTableColumnIndex(char ip);		 	//Parsing table column index
+void parse();							//Parse function stack
+void shift(char *);						//Shift function
 void reduce(char *);						//Reduce function
-char *getAction(int state, char t);			//Get action table entry
-char *getGoto(int state, char v);			//Get goto table entry
-char *productionReader(int prodno); 		//Returns RHS of production
-char getProductionSymbol(int prodno); 		//Return symbol of production as per production number
-int toNum(char i); 							//converts char to num
-void status(); 								//Check parser status
+char *getAction(int state, char t);				//Get action table entry
+char *getGoto(int state, char v);				//Get goto table entry
+char *productionReader(int prodno); 				//Returns RHS of production
+char getProductionSymbol(int prodno); 				//Return symbol of production as per production number
+int toNum(char i); 						//converts char to num
+void status(); 							//Check parser status
 
 /*Grammer data and parsing table*/
 char columns[6] = {'+', 'i', '$', 'E', 'T'}; 			//Table columns
 char *productions[3] = {"E->E+T", "E->T", "T->i"}; 		//Productions
-char *parsingtable[ROWS][COLUMNS]						//Parsing table
+char *parsingtable[ROWS][COLUMNS]				//Parsing table
 		=
 		{
 			/*
-						Action						 	Goto
-			+				i			$			E			T
+					Action				 	Goto
+			+			i			$			E			T
 			*/
-			{"",			"S3",		"",			"1",		"2"},
-			{"S4",			"",			"acc",		"",			""},
-			{"r2",			"r2",		"r2",		"",			""},
-			{"r3",			"r3",		"r3",		"",			""},
-			{"",			"S3",		"",			"",			"5"},
-			{"r1",			"r1",		"r1",		"",			""}
+			{"",			"S3",			"",			"1",			"2"},
+			{"S4",			"",			"acc",			"",			""},
+			{"r2",			"r2",			"r2",			"",			""},
+			{"r3",			"r3",			"r3",			"",			""},
+			{"",			"S3",			"",			"",			"5"},
+			{"r1",			"r1",			"r1",			"",			""}
 		};
 							
-int toNum(char i)									//Reads a character and returns equivalent int value
+int toNum(char i)							//Reads a character and returns equivalent int value
 {
 	return (int)(i-'0');
 }
 
-int getParsingTableColumnIndex(char in)				//Reads a column symbol and returns column index
+int getParsingTableColumnIndex(char in)					//Reads a column symbol and returns column index
 {
 	int i=0;
 	for(;i<COLUMNS; i++)
@@ -101,19 +101,19 @@ int getParsingTableColumnIndex(char in)				//Reads a column symbol and returns c
 		return i;
 }
 
-char *getAction(int state, char t)					//Reads and returns action table entry t€T{Terminal Set}
+char *getAction(int state, char t)					//Reads and returns action table entry tâ‚¬T{Terminal Set}
 {
 	
 	return parsingtable[state][getParsingTableColumnIndex(t)];
 }
 
-char *getGoto(int state, char v)					//Reads and returns goto table entry v€V{Variable Set}
+char *getGoto(int state, char v)					//Reads and returns goto table entry vâ‚¬V{Variable Set}
 {
 	
 	return parsingtable[state][getParsingTableColumnIndex(v)];
 }
 
-void push(char ip)									//Pushes symbol to stack
+void push(char ip)							//Pushes symbol to stack
 {
 	if(sp==(MAX_SIZE*2)-1)
 	{
@@ -126,7 +126,7 @@ void push(char ip)									//Pushes symbol to stack
 	}
 }
 
-void pop()										//Pop out symbol from stack
+void pop()								//Pop out symbol from stack
 {
 	if(sp==-1)
 	{
@@ -139,7 +139,7 @@ void pop()										//Pop out symbol from stack
 	}
 }
 
-char top()									//Reads and returns top of the stack
+char top()								//Reads and returns top of the stack
 {
 	return stack[sp];
 }
@@ -171,7 +171,7 @@ void parse()								//Parser - Read the algorithm above to understand function
 	}
 }
 
-void shift(char *in)				//Shift method
+void shift(char *in)							//Shift method
 {
 	char currentstate=in[1];
 	push(*ip);
@@ -193,19 +193,19 @@ void reduce(char *in)			//Reduce method
 	push(getGoto(toNum(prevState),top())[0]);
 }
 
-char *productionReader(int prodno)		//Reads and returns right hand side of production
+char *productionReader(int prodno)					//Reads and returns right hand side of production
 {
 	char *P=productions[prodno-1];
 	return (P+3);
 }
 
-char getProductionSymbol(int prodno)	//Reads and returns left hand side of a production
+char getProductionSymbol(int prodno)					//Reads and returns left hand side of a production
 {
 	char *P=productions[prodno-1];
 	return P[0];
 }
 
-void status()							//Print stack inputstring and action status on screen
+void status()								//Print stack inputstring and action status on screen
 {
 	printf("%s\t%s", stack, ip);
 }
